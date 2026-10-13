@@ -1,0 +1,358 @@
+{
+  "series": [
+    {
+      "id": "s-moon",
+      "slug": "moon-vessels",
+      "title": "Moon Vessels",
+      "years": "2019 – Present",
+      "description": "Large porcelain jars thrown in two halves and joined at the belly. The seam is left to settle in the kiln, so no two profiles close in quite the same way.",
+      "createdAt": "2019-06-01T00:00:00.000Z"
+    },
+    {
+      "id": "s-flow",
+      "slug": "flow",
+      "title": "Flow",
+      "years": "2022 – Present",
+      "description": "Tall forms made as a surface for glaze to travel down. Copper, iron and titanium are layered thickly at the rim and allowed to run until the kiln cools.",
+      "createdAt": "2022-06-01T00:00:00.000Z"
+    },
+    {
+      "id": "s-tide",
+      "slug": "tide-bowls",
+      "title": "Tide Bowls",
+      "years": "2016 – 2022",
+      "description": "Open forms carrying celadon and ash glazes that pool where the wall thins. Each bowl records the level the glaze reached before the fire stopped it.",
+      "createdAt": "2016-06-01T00:00:00.000Z"
+    },
+    {
+      "id": "s-ash",
+      "slug": "ash-and-stone",
+      "title": "Ash & Stone",
+      "years": "2014 – 2020",
+      "description": "Storage jars fired for five days in a wood kiln. No glaze is applied; the colour is fly ash from the firebox, melted onto whichever shoulder faced the flame.",
+      "createdAt": "2014-06-01T00:00:00.000Z"
+    },
+    {
+      "id": "s-ember",
+      "slug": "ember",
+      "title": "Ember",
+      "years": "2021 – Present",
+      "description": "Hand-built tea bowls and small jars pulled from the kiln while still glowing. Iron reds and carbon blacks are drawn by smoke rather than brush.",
+      "createdAt": "2021-06-01T00:00:00.000Z"
+    },
+    {
+      "id": "s-night",
+      "slug": "night-bowls",
+      "title": "Night Bowls",
+      "years": "2018 – 2023",
+      "description": "Tea bowls in iron-saturated black glaze. Held to the light, the surface breaks into fine brown streaks where the iron has risen and cooled.",
+      "createdAt": "2018-06-01T00:00:00.000Z"
+    },
+    {
+      "id": "s-quiet",
+      "slug": "quiet-forms",
+      "title": "Quiet Forms",
+      "years": "2020 – Present",
+      "description": "Single vessels made between larger bodies of work. Each one tests a glaze, a profile or a carving before it is carried into a series.",
+      "createdAt": "2020-06-01T00:00:00.000Z"
+    }
+  ],
+  "works": [
+    {
+      "id": "w-moon-1",
+      "seriesId": "s-moon",
+      "title": "Moon Vessel I",
+      "description": "Porcelain, clear glaze. 46 × 44 cm.",
+      "image": "/placeholders/moon-vessel-i.jpg",
+      "createdAt": "2026-06-24T00:00:00.000Z"
+    },
+    {
+      "id": "w-moon-2",
+      "seriesId": "s-moon",
+      "title": "Moon Vessel IV",
+      "description": "Porcelain, warm white glaze. 41 × 40 cm.",
+      "image": "/placeholders/moon-vessel-iv.jpg",
+      "createdAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "id": "w-moon-3",
+      "seriesId": "s-moon",
+      "title": "Moon Vessel VII",
+      "description": "Porcelain, pale blue-grey glaze. 44 × 43 cm.",
+      "image": "/placeholders/moon-vessel-vii.jpg",
+      "createdAt": "2026-08-05T00:00:00.000Z"
+    },
+    {
+      "id": "w-moon-4",
+      "seriesId": "s-moon",
+      "title": "Lattice Moon",
+      "description": "Double-walled porcelain with pierced outer wall, celadon glaze. 38 × 40 cm.",
+      "image": "/placeholders/lattice-moon.jpg",
+      "createdAt": "2026-08-26T00:00:00.000Z"
+    },
+    {
+      "id": "w-tide-5",
+      "seriesId": "s-tide",
+      "title": "High Water",
+      "description": "Stoneware, carved exterior, celadon glaze. 9 × 21 cm.",
+      "image": "/placeholders/high-water.jpg",
+      "createdAt": "2026-06-20T00:00:00.000Z"
+    },
+    {
+      "id": "w-tide-6",
+      "seriesId": "s-tide",
+      "title": "Slack Tide",
+      "description": "Stoneware, grey celadon with iron spots. 7 × 16 cm.",
+      "image": "/placeholders/slack-tide.jpg",
+      "createdAt": "2026-07-11T00:00:00.000Z"
+    },
+    {
+      "id": "w-tide-7",
+      "seriesId": "s-tide",
+      "title": "Estuary",
+      "description": "Stoneware, olive celadon over incised lines. 8 × 18 cm.",
+      "image": "/placeholders/estuary.jpg",
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "w-tide-8",
+      "seriesId": "s-tide",
+      "title": "Kelp",
+      "description": "Earthenware, moulded medallions, green lead glaze. 14 × 17 cm.",
+      "image": "/placeholders/kelp.jpg",
+      "createdAt": "2026-08-22T00:00:00.000Z"
+    },
+    {
+      "id": "w-ember-9",
+      "seriesId": "s-ember",
+      "title": "Ember I",
+      "description": "Hand-built earthenware, red raku glaze. 9 × 12 cm.",
+      "image": "/placeholders/ember-i.jpg",
+      "createdAt": "2026-06-07T00:00:00.000Z"
+    },
+    {
+      "id": "w-ember-10",
+      "seriesId": "s-ember",
+      "title": "Ember III",
+      "description": "Hand-built earthenware, red raku glaze. 9 × 12 cm.",
+      "image": "/placeholders/ember-iii.jpg",
+      "createdAt": "2026-06-28T00:00:00.000Z"
+    },
+    {
+      "id": "w-ember-11",
+      "seriesId": "s-ember",
+      "title": "Char",
+      "description": "Hand-built earthenware, black raku glaze. 8 × 11 cm.",
+      "image": "/placeholders/char.jpg",
+      "createdAt": "2026-07-19T00:00:00.000Z"
+    },
+    {
+      "id": "w-ember-12",
+      "seriesId": "s-ember",
+      "title": "Windfall",
+      "description": "Stoneware, black glaze with rust-brown splashes. 14 × 17 cm.",
+      "image": "/placeholders/windfall.jpg",
+      "createdAt": "2026-08-09T00:00:00.000Z"
+    },
+    {
+      "id": "w-ember-13",
+      "seriesId": "s-ember",
+      "title": "Windfall, reverse",
+      "description": "Stoneware, black glaze with rust-brown splashes. 14 × 17 cm.",
+      "image": "/placeholders/windfall-reverse.jpg",
+      "createdAt": "2026-08-30T00:00:00.000Z"
+    },
+    {
+      "id": "w-ash-1",
+      "seriesId": "s-ash",
+      "title": "Ridge Jar",
+      "description": "Wood-fired stoneware, natural ash glaze. 24 × 21 cm.",
+      "image": "/placeholders/ridge-jar.jpg",
+      "createdAt": "2026-05-07T00:00:00.000Z"
+    },
+    {
+      "id": "w-ash-2",
+      "seriesId": "s-ash",
+      "title": "Lidded Jar, Rain",
+      "description": "Wood-fired stoneware, ash and iron glaze, bone lid. 16 × 15 cm.",
+      "image": "/placeholders/lidded-jar-rain.jpg",
+      "createdAt": "2026-05-28T00:00:00.000Z"
+    },
+    {
+      "id": "w-ash-3",
+      "seriesId": "s-ash",
+      "title": "Brick Jar",
+      "description": "Unglazed wood-fired stoneware. 19 × 18 cm.",
+      "image": "/placeholders/brick-jar.jpg",
+      "createdAt": "2026-06-18T00:00:00.000Z"
+    },
+    {
+      "id": "w-ash-4",
+      "seriesId": "s-ash",
+      "title": "Four Lugs",
+      "description": "Stoneware, running ash glaze over iron slip. 31 × 33 cm.",
+      "image": "/placeholders/four-lugs.jpg",
+      "createdAt": "2026-07-09T00:00:00.000Z"
+    },
+    {
+      "id": "w-ash-5",
+      "seriesId": "s-ash",
+      "title": "Moss Bottle",
+      "description": "Wood-fired stoneware, green natural ash glaze. 27 × 17 cm.",
+      "image": "/placeholders/moss-bottle.jpg",
+      "createdAt": "2026-07-30T00:00:00.000Z"
+    },
+    {
+      "id": "w-ash-6",
+      "seriesId": "s-ash",
+      "title": "Harvest Jar",
+      "description": "Wood-fired stoneware, ash runs over bare clay. 42 × 34 cm.",
+      "image": "/placeholders/harvest-jar.jpg",
+      "createdAt": "2026-08-20T00:00:00.000Z"
+    },
+    {
+      "id": "w-flow-7",
+      "seriesId": "s-flow",
+      "title": "Green Fall",
+      "description": "Stoneware, streaked green and white glaze. 38 × 22 cm.",
+      "image": "/placeholders/green-fall.jpg",
+      "createdAt": "2026-04-07T00:00:00.000Z"
+    },
+    {
+      "id": "w-flow-8",
+      "seriesId": "s-flow",
+      "title": "Oxblood Column",
+      "description": "Stoneware, copper red glaze, three lugs. 52 × 17 cm.",
+      "image": "/placeholders/oxblood-column.jpg",
+      "createdAt": "2026-04-28T00:00:00.000Z"
+    },
+    {
+      "id": "w-flow-9",
+      "seriesId": "s-flow",
+      "title": "Dusk Stem",
+      "description": "Stoneware, plum and bronze glaze. 34 × 15 cm.",
+      "image": "/placeholders/dusk-stem.jpg",
+      "createdAt": "2026-05-19T00:00:00.000Z"
+    },
+    {
+      "id": "w-flow-10",
+      "seriesId": "s-flow",
+      "title": "Iris",
+      "description": "Stoneware, violet and green flowing glaze. 29 × 18 cm.",
+      "image": "/placeholders/iris.jpg",
+      "createdAt": "2026-06-09T00:00:00.000Z"
+    },
+    {
+      "id": "w-flow-11",
+      "seriesId": "s-flow",
+      "title": "Gourd, Night",
+      "description": "Stoneware, blue-black glaze with copper flashing. 17 × 21 cm.",
+      "image": "/placeholders/gourd-night.jpg",
+      "createdAt": "2026-06-30T00:00:00.000Z"
+    },
+    {
+      "id": "w-flow-12",
+      "seriesId": "s-flow",
+      "title": "Lichen Sphere",
+      "description": "Stoneware, mottled copper red and green glaze. 20 × 21 cm.",
+      "image": "/placeholders/lichen-sphere.jpg",
+      "createdAt": "2026-07-21T00:00:00.000Z"
+    },
+    {
+      "id": "w-flow-13",
+      "seriesId": "s-flow",
+      "title": "Red Lyre",
+      "description": "Earthenware, speckled red glaze, pulled handles. 23 × 14 cm.",
+      "image": "/placeholders/red-lyre.jpg",
+      "createdAt": "2026-08-11T00:00:00.000Z"
+    },
+    {
+      "id": "w-flow-14",
+      "seriesId": "s-flow",
+      "title": "Pinched Bottle",
+      "description": "Earthenware, grey-green and ochre glaze. 30 × 13 cm.",
+      "image": "/placeholders/pinched-bottle.jpg",
+      "createdAt": "2026-09-01T00:00:00.000Z"
+    },
+    {
+      "id": "w-night-15",
+      "seriesId": "s-night",
+      "title": "Night Bowl I",
+      "description": "Stoneware, iron black glaze with brown streaking. 7 × 12 cm.",
+      "image": "/placeholders/night-bowl-i.jpg",
+      "createdAt": "2026-06-22T00:00:00.000Z"
+    },
+    {
+      "id": "w-night-16",
+      "seriesId": "s-night",
+      "title": "Night Bowl II",
+      "description": "Stoneware, black glaze, rust rim. 6 × 12 cm.",
+      "image": "/placeholders/night-bowl-ii.jpg",
+      "createdAt": "2026-07-13T00:00:00.000Z"
+    },
+    {
+      "id": "w-night-17",
+      "seriesId": "s-night",
+      "title": "Night Bowl, turned",
+      "description": "Stoneware, black glaze, bare foot. 6 × 12 cm.",
+      "image": "/placeholders/night-bowl-turned.jpg",
+      "createdAt": "2026-08-03T00:00:00.000Z"
+    },
+    {
+      "id": "w-night-18",
+      "seriesId": "s-night",
+      "title": "Night Bowl V",
+      "description": "Stoneware, blue-black glaze with fine streaking. 7 × 13 cm.",
+      "image": "/placeholders/night-bowl-v.jpg",
+      "createdAt": "2026-08-24T00:00:00.000Z"
+    },
+    {
+      "id": "w-quiet-19",
+      "seriesId": "s-quiet",
+      "title": "White Bottle",
+      "description": "Porcelain, clear glaze. 31 × 16 cm.",
+      "image": "/placeholders/white-bottle.jpg",
+      "createdAt": "2026-05-15T00:00:00.000Z"
+    },
+    {
+      "id": "w-quiet-20",
+      "seriesId": "s-quiet",
+      "title": "Tree Line",
+      "description": "Stoneware, carved relief, matte tan and green glaze. 23 × 15 cm.",
+      "image": "/placeholders/tree-line.jpg",
+      "createdAt": "2026-06-05T00:00:00.000Z"
+    },
+    {
+      "id": "w-quiet-21",
+      "seriesId": "s-quiet",
+      "title": "Rose Ash",
+      "description": "Porcelain, pink crystalline glaze over carved bands. 19 × 9 cm.",
+      "image": "/placeholders/rose-ash.jpg",
+      "createdAt": "2026-06-26T00:00:00.000Z"
+    },
+    {
+      "id": "w-quiet-22",
+      "seriesId": "s-quiet",
+      "title": "Pewter Flask",
+      "description": "Porcelain, metallic black glaze, white neck. 22 × 17 cm.",
+      "image": "/placeholders/pewter-flask.jpg",
+      "createdAt": "2026-07-17T00:00:00.000Z"
+    },
+    {
+      "id": "w-quiet-23",
+      "seriesId": "s-quiet",
+      "title": "Thrown Lines",
+      "description": "Stoneware, amber and green glaze over throwing rings. 25 × 13 cm.",
+      "image": "/placeholders/thrown-lines.jpg",
+      "createdAt": "2026-08-07T00:00:00.000Z"
+    },
+    {
+      "id": "w-quiet-24",
+      "seriesId": "s-quiet",
+      "title": "Tree Line, large",
+      "description": "Stoneware, carved relief, matte tan and green glaze. 30 × 24 cm.",
+      "image": "/placeholders/tree-line-large.jpg",
+      "createdAt": "2026-08-28T00:00:00.000Z"
+    }
+  ]
+}
