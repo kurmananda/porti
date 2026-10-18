@@ -7,27 +7,34 @@ import { CV_PATH, making } from "@/lib/site";
 
 export const metadata = { title: "About" };
 
-// A titled list of dated entries (exhibitions, education, press).
+// A titled list of entries (exhibitions, education, press).
 function Timeline({ title, entries }) {
   if (entries.length === 0) return null;
   return (
     <Reveal as="section" className="grid grid-cols-12 gap-x-6 gap-y-6">
-      <h2 className="col-span-12 font-display text-3xl sm:text-4xl lg:col-span-4">
+      <h2 className="col-span-12 font-display text-2xl lg:col-span-4">
         {title}
-        <span className="label ml-3 align-middle text-clay">
-          {String(entries.length).padStart(2, "0")}
-        </span>
       </h2>
       <ul className="col-span-12 border-b-[1.5px] border-line lg:col-span-8">
         {entries.map((entry) => (
           <li
-            key={entry.year + entry.text}
-            className="flex gap-6 border-t-[1.5px] border-line py-4 text-lg transition-[padding] duration-500 ease-kiln hover:pl-3 sm:gap-10"
+            key={entry.text}
+            className="flex gap-6 border-t-[1.5px] border-line py-4 text-base transition-[padding] duration-500 ease-kiln hover:pl-3 sm:gap-10"
           >
-            <span className="w-20 shrink-0 font-display text-xl text-clay">
-              {entry.year}
-            </span>
-            <span>{entry.text}</span>
+            {title === "Selected exhibitions" ? (
+              <span>
+                {entry.text
+                  .replace(/\b\d+(?:st|nd|rd|th)?(?:\s+edition)?\b/g, "")
+                  .replace(/\(\s*also\s*\)/gi, "")
+                  .replace(/,\s*,+/g, ",")
+                  .replace(/,\s*$/g, "")
+                  .replace(/\s+([,.])/g, "$1")
+                  .replace(/\s{2,}/g, " ")
+                  .trim()}
+              </span>
+            ) : (
+              <span>{entry.text}</span>
+            )}
           </li>
         ))}
       </ul>
@@ -60,7 +67,7 @@ export default async function AboutPage() {
     <>
       <div className="mx-auto max-w-[1500px] px-5 pt-32 sm:px-10 sm:pt-44">
         <p className="label text-clay">About — {site.tagline}</p>
-        <h1 className="mt-6 max-w-5xl font-display text-4xl leading-[1.1] sm:text-6xl">
+        <h1 className="mt-6 max-w-5xl font-display text-3xl leading-[1.15] sm:text-4xl">
           {lead}
         </h1>
 
@@ -76,7 +83,7 @@ export default async function AboutPage() {
           </div>
 
           <div className="col-span-12 sm:col-span-6 lg:col-span-6 lg:col-start-7">
-            <div className="space-y-6 text-xl leading-relaxed">
+            <div className="space-y-5 text-base leading-relaxed sm:text-lg">
               {rest.map((paragraph, index) => (
                 <Reveal as="p" key={index} delay={index * 100}>
                   {paragraph}
@@ -86,7 +93,7 @@ export default async function AboutPage() {
             <Reveal className="mt-10 flex flex-wrap gap-4">
               <Link
                 href="/works"
-                className="btn label bg-ink text-paper"
+                className="btn label"
                 style={{ "--btn-fill": "var(--clay)" }}
               >
                 View the works <span className="arrow">→</span>
@@ -109,7 +116,7 @@ export default async function AboutPage() {
       </div>
 
       {(site.collections.length > 0 || site.memberships.length > 0) && (
-        <section className="mt-28 bg-glaze text-paper sm:mt-40">
+        <section className="mt-24 bg-paper text-ink sm:mt-32">
           <div className="mx-auto grid max-w-[1500px] gap-x-12 gap-y-14 px-5 py-20 sm:px-10 sm:py-28 lg:grid-cols-2">
             <PlainList title="Collections" items={site.collections} />
             <PlainList title="Memberships & community" items={site.memberships} />
@@ -120,17 +127,17 @@ export default async function AboutPage() {
       <section className="mx-auto max-w-[1500px] px-5 pt-24 sm:px-10 sm:pt-36">
         <Reveal>
           <p className="label text-clay">In the studio</p>
-          <h2 className="mt-4 font-display text-5xl leading-none sm:text-7xl">
-            From clay <em className="text-clay">to kiln</em>
+          <h2 className="mt-3 font-display text-2xl leading-tight sm:text-3xl">
+            From clay to kiln
           </h2>
         </Reveal>
-        <ol className="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="mt-10 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
           {making.map((step, index) => (
             <Reveal as="li" key={step.title} delay={index * 120}>
               <div className="rule mb-7" />
               <Icon name={step.icon} draw className="h-14 w-14 text-clay" />
-              <h3 className="mt-5 font-display text-3xl">{step.title}</h3>
-              <p className="mt-2 text-lg text-stone">{step.text}</p>
+              <h3 className="mt-4 font-display text-xl">{step.title}</h3>
+              <p className="mt-2 text-base text-stone">{step.text}</p>
             </Reveal>
           ))}
         </ol>

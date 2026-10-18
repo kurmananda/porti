@@ -11,7 +11,16 @@ export async function getPortfolio() {
   cacheLife("days");
   cacheTag(PORTFOLIO_TAG);
 
-  return groupPortfolio(await readStore());
+  return groupPortfolio(await readStore()).map((series) => ({
+    ...series,
+    works: series.works.map((work) => ({
+      ...work,
+      title: work.title.replace(/\s+(?:VIII|VII|VI|V|IV|III|II|IX|X|I)$/i, ""),
+      description: work.description
+        ?.replace(/\s+\d+\s*[×x]\s*\d+\s*cm\.?/gi, "")
+        .trim(),
+    })),
+  }));
 }
 
 export function groupPortfolio({ series, works }) {

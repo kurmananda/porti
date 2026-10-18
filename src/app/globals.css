@@ -1,18 +1,16 @@
 @import "tailwindcss";
 
-/* Colours are deliberately saturated enough to survive washed-out LCD panels. */
 :root {
-  --paper: #eadfcb;
-  --paper-deep: #dccdb1;
-  --ink: #1b1612;
-  --stone: #554c41;
-  --clay: #993814;
-  --clay-deep: #7a2b0d;
-  /* Terracotta for text on the dark sections. */
-  --clay-light: #ee9a6e;
-  --glaze: #26503f;
-  --glaze-light: #a9c2ad;
-  --line: rgb(27 22 18 / 0.24);
+  --paper: #f4f0e5;
+  --paper-deep: #f4f0e5;
+  --ink: #292821;
+  --stone: #625f56;
+  --clay: #292821;
+  --clay-deep: #292821;
+  --clay-light: #625f56;
+  --glaze: #f4f0e5;
+  --glaze-light: #625f56;
+  --line: rgb(41 40 33 / 0.22);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
 }
@@ -42,20 +40,8 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
-  font-size: 1.0625rem;
-  line-height: 1.6;
-}
-
-/* A faint grain over everything, like unglazed clay. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 30;
-  pointer-events: none;
-  opacity: 0.11;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.08 0 0 0 0 0.06 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  font-size: 1rem;
+  line-height: 1.55;
 }
 
 .font-display {
@@ -159,10 +145,6 @@ body::before {
   animation: word-rise 1.1s var(--ease-out) forwards;
   animation-delay: calc(var(--i) * 42ms + 100ms);
 }
-/* On a fresh load the words wait for the intro curtain to lift. */
-html:not([data-ready]) .word > span {
-  animation-delay: calc(var(--i) * 42ms + 1250ms);
-}
 @keyframes word-rise {
   to {
     transform: none;
@@ -238,35 +220,6 @@ html:not([data-ready]) .word > span {
   }
 }
 
-/* Intro curtain: a vessel is drawn, then the curtain lifts. */
-.intro {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: grid;
-  place-items: center;
-  background: var(--ink);
-  color: var(--paper);
-  pointer-events: none;
-  animation: intro-lift 0.9s var(--ease-in-out) 1s forwards;
-}
-.intro path {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: intro-draw 0.95s var(--ease-in-out) 0.05s forwards;
-}
-@keyframes intro-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes intro-lift {
-  to {
-    transform: translateY(-100%);
-    visibility: hidden;
-  }
-}
-
 .spin-slow {
   animation: spin 28s linear infinite;
 }
@@ -286,27 +239,6 @@ html:not([data-ready]) .word > span {
   to {
     transform: translateX(-50%);
   }
-}
-
-@keyframes scroll-cue {
-  0% {
-    transform: scaleY(0);
-    transform-origin: top;
-  }
-  50% {
-    transform: scaleY(1);
-    transform-origin: top;
-  }
-  51% {
-    transform-origin: bottom;
-  }
-  100% {
-    transform: scaleY(0);
-    transform-origin: bottom;
-  }
-}
-.scroll-cue {
-  animation: scroll-cue 2.4s var(--ease-out) infinite;
 }
 
 /* Images drift a little against the scroll, where the browser supports it. */
@@ -341,8 +273,8 @@ dialog.lightbox {
   max-height: none;
   width: 100vw;
   height: 100dvh;
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--paper);
+  color: var(--ink);
 }
 dialog.lightbox[open] {
   animation: lightbox-in 0.4s ease both;
@@ -374,9 +306,6 @@ dialog.lightbox[open] {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     transition-delay: 0ms !important;
-  }
-  .intro {
-    display: none;
   }
   .parallax,
   .marquee-track,

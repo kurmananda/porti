@@ -7,11 +7,10 @@ const MENU_LIMIT = 5;
 
 export default async function SiteLayout({ children }) {
   const [portfolio, site] = await Promise.all([getPortfolio(), getSite()]);
-  const series = recentSeries(portfolio, MENU_LIMIT).map(({ id, slug, title, years, cover }) => ({
+  const series = recentSeries(portfolio, MENU_LIMIT).map(({ id, slug, title, cover }) => ({
     id,
     slug,
     title,
-    years,
     cover,
   }));
 
@@ -19,15 +18,13 @@ export default async function SiteLayout({ children }) {
     <>
       <a
         href="#content"
-        className="label sr-only z-[60] bg-ink px-4 py-3 text-paper focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+        className="label sr-only z-[60] bg-paper px-4 py-3 text-ink focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
       >
         Skip to content
       </a>
       <Header
         name={site.name}
-        discipline={site.discipline}
         series={series}
-        seriesTotal={portfolio.length}
       />
       <main id="content" className="page-enter flex-1">
         {children}

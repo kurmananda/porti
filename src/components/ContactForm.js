@@ -54,7 +54,7 @@ export default function ContactForm({ email, seriesTitles }) {
       <div className="flex flex-wrap items-center gap-5">
         <button
           type="submit"
-          className="btn label bg-ink text-paper"
+          className="btn label"
           style={{ "--btn-fill": "var(--clay)" }}
         >
           Write the email <span className="arrow">→</span>

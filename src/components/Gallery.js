@@ -46,12 +46,9 @@ export default function Gallery({ works }) {
                     View
                   </span>
                 </span>
-                <span className="mt-4 flex items-baseline gap-4">
-                  <span className="label text-clay">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
+                <span className="mt-3 block">
                   <span>
-                    <span className="block font-display text-2xl transition-colors duration-300 group-hover:text-clay sm:text-[1.75rem]">
+                    <span className="block font-display text-xl transition-colors duration-300 group-hover:text-clay sm:text-2xl">
                       {item.title}
                     </span>
                     {item.description && (
@@ -84,10 +81,7 @@ export default function Gallery({ works }) {
         {work && (
           <div className="grid h-full grid-rows-[auto_1fr_auto] lg:grid-cols-[1fr_24rem] lg:grid-rows-[auto_1fr]">
             <div className="flex items-center justify-between px-5 py-4 sm:px-8 lg:col-span-2">
-              <span className="label text-paper/80">
-                {String(active + 1).padStart(2, "0")} /{" "}
-                {String(works.length).padStart(2, "0")}
-              </span>
+              <span className="label text-stone">{work.title}</span>
               <button
                 type="button"
                 onClick={() => setActive(null)}
@@ -110,11 +104,11 @@ export default function Gallery({ works }) {
               />
             </div>
 
-            <div className="flex flex-col gap-6 border-t border-paper/15 px-5 py-6 sm:px-8 lg:border-l lg:border-t-0 lg:py-8">
+            <div className="flex flex-col gap-6 border-t border-ink/15 px-5 py-6 sm:px-8 lg:border-l lg:border-t-0 lg:py-8">
               <div key={work.id} className="page-enter">
-                <h2 className="font-display text-3xl sm:text-4xl">{work.title}</h2>
+                <h2 className="font-display text-2xl sm:text-3xl">{work.title}</h2>
                 {work.description && (
-                  <p className="mt-4 max-h-32 overflow-y-auto whitespace-pre-line text-lg leading-relaxed text-paper/85 lg:max-h-none">
+                  <p className="mt-4 max-h-32 overflow-y-auto whitespace-pre-line text-base leading-relaxed text-stone lg:max-h-none">
                     {work.description}
                   </p>
                 )}
@@ -125,7 +119,7 @@ export default function Gallery({ works }) {
                     type="button"
                     onClick={() => step(-1)}
                     aria-label="Previous work"
-                    className="h-14 flex-1 rounded-full border-[1.5px] border-paper/40 text-lg transition-colors duration-300 hover:border-clay hover:bg-clay"
+                    className="h-12 flex-1 rounded-full border border-ink/40 text-base transition-colors duration-300 hover:border-clay hover:bg-clay"
                   >
                     ←
                   </button>
@@ -133,7 +127,7 @@ export default function Gallery({ works }) {
                     type="button"
                     onClick={() => step(1)}
                     aria-label="Next work"
-                    className="h-14 flex-1 rounded-full border-[1.5px] border-paper/40 text-lg transition-colors duration-300 hover:border-clay hover:bg-clay"
+                    className="h-12 flex-1 rounded-full border border-ink/40 text-base transition-colors duration-300 hover:border-clay hover:bg-clay"
                   >
                     →
                   </button>

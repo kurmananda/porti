@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
-import ScrollPot from "./ScrollPot";
 import WorkImage from "./WorkImage";
 
 const LINKS = [
@@ -20,8 +19,7 @@ function PathnameReporter({ onChange }) {
   return null;
 }
 
-export default function Header({ name, discipline, series, seriesTotal }) {
-  const moreSeries = seriesTotal - series.length;
+export default function Header({ name, series }) {
   const [pathname, setPathname] = useState(null);
   const [panelOpen, setPanelOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -114,25 +112,15 @@ export default function Header({ name, discipline, series, seriesTotal }) {
         <div
           className={`relative z-10 transition-colors duration-500 ${
             menuOpen
-              ? "text-paper"
+              ? "text-ink"
               : solid
                 ? "bg-paper/85 backdrop-blur-md"
                 : "bg-transparent"
           }`}
         >
           <div className="mx-auto flex h-16 max-w-[1500px] items-center justify-between px-5 sm:h-20 sm:px-10">
-            <Link
-              href="/"
-              onClick={closeAll}
-              className="group flex items-center gap-3"
-            >
-              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-clay text-paper transition-colors duration-500 group-hover:bg-ink sm:h-16 sm:w-16">
-                <ScrollPot className="h-10 w-10 sm:h-[3.25rem] sm:w-[3.25rem]" />
-              </span>
-              <span className="font-display text-2xl sm:text-[1.75rem]">{name}</span>
-              <span className="label hidden text-stone transition-colors duration-300 group-hover:text-clay lg:inline">
-                {discipline}
-              </span>
+            <Link href="/" onClick={closeAll} className="font-display text-xl sm:text-2xl">
+              {name}
             </Link>
 
             <nav
@@ -249,10 +237,7 @@ export default function Header({ name, discipline, series, seriesTotal }) {
                         opacity: panelOpen ? 1 : 0,
                       }}
                     >
-                      <span className="label w-8 text-clay">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      <span className="font-display text-2xl lg:text-3xl">
+                      <span className="font-display text-xl lg:text-2xl">
                         {item.title}
                       </span>
                       <span
@@ -266,7 +251,7 @@ export default function Header({ name, discipline, series, seriesTotal }) {
                 ))}
               </ul>
               <Link href="/works" onClick={closeAll} className="btn label mt-8">
-                {moreSeries > 0 ? `More series (${moreSeries})` : "All works"}{" "}
+                All artwork{" "}
                 <span className="arrow">→</span>
               </Link>
             </div>
@@ -289,9 +274,8 @@ export default function Header({ name, discipline, series, seriesTotal }) {
                     ),
                 )}
               </div>
-              <p className="label mt-3 flex justify-between text-stone">
-                <span>{series[preview]?.title}</span>
-                <span>{series[preview]?.years}</span>
+              <p className="label mt-3 text-stone">
+                {series[preview]?.title}
               </p>
             </div>
           </div>
@@ -302,7 +286,7 @@ export default function Header({ name, discipline, series, seriesTotal }) {
       <div
         id="mobile-menu"
         inert={!menuOpen}
-        className={`fixed inset-0 z-40 overflow-y-auto bg-ink text-paper transition-[clip-path] duration-700 ease-kiln md:hidden ${
+        className={`fixed inset-0 z-40 overflow-y-auto bg-paper text-ink transition-[clip-path] duration-700 ease-kiln md:hidden ${
           menuOpen
             ? "[clip-path:inset(0_0_0_0)]"
             : "pointer-events-none [clip-path:inset(0_0_100%_0)]"
@@ -324,7 +308,7 @@ export default function Header({ name, discipline, series, seriesTotal }) {
                   href={link.href}
                   onClick={closeAll}
                   aria-current={activeKey === link.key ? "page" : undefined}
-                  className="flex items-baseline gap-4 font-display text-5xl leading-tight"
+                  className="flex items-baseline gap-4 font-display text-3xl leading-tight"
                 >
                   {link.label}
                   {activeKey === link.key && (
@@ -338,29 +322,17 @@ export default function Header({ name, discipline, series, seriesTotal }) {
                         <Link
                           href={`/works/${item.slug}`}
                           onClick={closeAll}
-                          className="block py-2 text-lg text-paper/80 active:text-paper"
+                          className="block py-2 text-base text-stone active:text-ink"
                         >
                           {item.title}
                         </Link>
                       </li>
                     ))}
-                    {moreSeries > 0 && (
-                      <li>
-                        <Link
-                          href="/works"
-                          onClick={closeAll}
-                          className="block py-2 text-lg text-clay-light"
-                        >
-                          More series ({moreSeries}) →
-                        </Link>
-                      </li>
-                    )}
                   </ul>
                 )}
               </li>
             ))}
           </ul>
-          <p className="label mt-auto pt-10 text-paper/60">{discipline}</p>
         </nav>
       </div>
     </>

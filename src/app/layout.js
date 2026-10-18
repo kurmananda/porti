@@ -1,5 +1,4 @@
 import { Fraunces, Geist } from "next/font/google";
-import Intro from "@/components/Intro";
 import { getSite } from "@/lib/data";
 import "./globals.css";
 
@@ -19,7 +18,7 @@ export async function generateMetadata() {
   const site = await getSite();
   return {
     title: {
-      default: `${site.name} — ${site.discipline}`,
+      default: site.name,
       template: `%s — ${site.name}`,
     },
     description: site.statements[0],
@@ -42,7 +41,6 @@ export default function RootLayout({ children }) {
             }
           </style>
         </noscript>
-        <Intro />
         {children}
       </body>
     </html>

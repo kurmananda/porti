@@ -17,7 +17,7 @@ export default function SeriesList({ series }) {
 
   return (
     <div
-      className="relative"
+      className="relative overflow-x-clip"
       onPointerMove={onMove}
       onPointerLeave={() => setActive(null)}
     >
@@ -35,19 +35,10 @@ export default function SeriesList({ series }) {
                 active !== null && active !== index ? "opacity-35" : "opacity-100"
               } ${active === index ? "text-clay md:pl-6" : ""}`}
             >
-              <span className="label col-span-2 text-clay sm:col-span-1">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <span className="col-span-10 font-display text-4xl leading-none sm:col-span-6 sm:text-5xl lg:text-6xl">
+              <span className="col-span-12 font-display text-2xl leading-tight sm:col-span-7 sm:text-3xl lg:text-4xl">
                 {item.title}
               </span>
-              <span className="label col-span-6 col-start-3 mt-3 text-stone sm:col-span-3 sm:col-start-auto sm:mt-0">
-                {item.years}
-              </span>
-              <span className="label col-span-4 mt-3 flex items-center justify-end gap-3 text-stone sm:col-span-2 sm:mt-0">
-                <span className="hidden lg:inline">
-                  {item.works.length} {item.works.length === 1 ? "work" : "works"}
-                </span>
+              <span className="col-span-12 mt-2 flex items-center justify-end gap-3 text-stone sm:col-span-5 sm:mt-0">
                 <span
                   aria-hidden="true"
                   className="inline-block text-base text-ink transition-transform duration-500 ease-kiln group-hover:translate-x-2"

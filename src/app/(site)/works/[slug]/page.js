@@ -29,7 +29,7 @@ async function Series({ params }) {
   const { slug } = await params;
   const found = await getSeriesBySlug(slug);
   if (!found) notFound();
-  const { series, index, total, next } = found;
+  const { series, next } = found;
 
   return (
     <>
@@ -38,32 +38,16 @@ async function Series({ params }) {
           <Link href="/works" className="label link-draw text-clay">
             ← All works
           </Link>
-          <h1 className="mt-8 font-display text-6xl leading-[0.98] sm:text-8xl lg:text-[8.5rem]">
+          <h1 className="mt-6 font-display text-3xl leading-tight sm:text-4xl">
             {series.title}
           </h1>
         </div>
-        <dl className="label col-span-12 mt-10 grid grid-cols-3 gap-4 self-end border-t-[1.5px] border-line pt-5 text-stone lg:col-span-4 lg:mt-0">
-          <div>
-            <dt>Series</dt>
-            <dd className="mt-2 text-base text-ink">
-              {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
-            </dd>
-          </div>
-          <div>
-            <dt>Years</dt>
-            <dd className="mt-2 text-base text-ink">{series.years || "—"}</dd>
-          </div>
-          <div>
-            <dt>Works</dt>
-            <dd className="mt-2 text-base text-ink">{series.works.length}</dd>
-          </div>
-        </dl>
       </header>
 
       {series.description && (
         <Reveal
           as="p"
-          className="mt-14 max-w-4xl whitespace-pre-line font-display text-2xl leading-[1.25] sm:mt-20 sm:text-[2.5rem]"
+          className="mt-10 max-w-4xl whitespace-pre-line font-display text-xl leading-relaxed sm:mt-14 sm:text-2xl"
         >
           {series.description}
         </Reveal>
