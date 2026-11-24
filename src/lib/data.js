@@ -1,17 +1,12 @@
 import "server-only";
-import { cacheLife, cacheTag } from "next/cache";
-import { site as defaults } from "./site";
-import { readStore } from "./store";
-
-export const PORTFOLIO_TAG = "portfolio";
+import { connection } from "next/server";
+import { readPortfolio, readSite, readStore } from "./store";
 
 // Series in display order, each with its works attached.
 export async function getPortfolio() {
-  "use cache";
-  cacheLife("days");
-  cacheTag(PORTFOLIO_TAG);
-
-  return groupPortfolio(await readStore()).map((series) => ({
+  await connection();
+  const portfolio = await readPortfolio();
+  return groupPortfolio(portfolio).map((series) => ({
     ...series,
     works: series.works.map((work) => ({
       ...work,
@@ -30,20 +25,15 @@ export function groupPortfolio({ series, works }) {
   });
 }
 
-// Artist details: the defaults in site.js with anything saved from the admin on top.
+// Artist details are read directly from the Supabase site settings row.
 export async function getSite() {
-  "use cache";
-  cacheLife("days");
-  cacheTag(PORTFOLIO_TAG);
-
-  return mergeSite((await readStore()).site);
+  await connection();
+  return mergeSite(await readSite());
 }
 
-export function mergeSite(saved) {
-  const site = { ...defaults, ...saved };
-  // Sites saved before the socials list existed only have an Instagram link.
-  if (!saved?.socials && saved?.instagram) {
-    site.socials = [{ label: "Instagram", url: saved.instagram }];
+export function mergeSite(site) {
+  if (!site || !Array.isArray(site.socials)) {
+    throw new Error("Supabase site settings are missing or invalid.");
   }
   return site;
 }
@@ -79,4 +69,12 @@ export function recentWorks(portfolio, limit) {
     )
     .sort(newestFirst)
     .slice(0, limit);
+}
+
+export function recentExhibitions(exhibitions) {
+  return [...exhibitions].sort((a, b) => {
+    const yearA = Number(a.year?.match(/\d{4}/)?.[0] ?? 0);
+    const yearB = Number(b.year?.match(/\d{4}/)?.[0] ?? 0);
+    return yearB - yearA;
+  });
 }

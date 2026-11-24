@@ -1,11 +1,16 @@
 "use server";
 
 import { randomUUID } from "node:crypto";
-import { updateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { checkPassword, endSession, isAdmin, isConfigured, startSession } from "@/lib/auth";
-import { PORTFOLIO_TAG } from "@/lib/data";
-import { mutateStore, slugify } from "@/lib/store";
+import { getExhibitions, replaceExhibitions } from "@/lib/exhibitions";
+import {
+  isSupabaseConfigured,
+  mutateStore,
+  saveContactMessage,
+  slugify,
+} from "@/lib/store";
 
 const text = (formData, key, max) =>
   String(formData.get(key) ?? "").trim().slice(0, max);
@@ -82,7 +87,7 @@ export async function saveSeries(_prev, formData) {
     return { ok: true, id: series.id, message: `Created “${title}”.` };
   });
 
-  updateTag(PORTFOLIO_TAG);
+  revalidatePath("/", "layout");
   return result;
 }
 
@@ -92,7 +97,7 @@ export async function deleteSeries(id) {
     data.series = data.series.filter((s) => s.id !== id);
     data.works = data.works.filter((w) => w.seriesId !== id);
   });
-  updateTag(PORTFOLIO_TAG);
+  revalidatePath("/", "layout");
 }
 
 export async function saveWork(_prev, formData) {
@@ -127,7 +132,7 @@ export async function saveWork(_prev, formData) {
     return { ok: true, message: `Added “${title}”.` };
   });
 
-  updateTag(PORTFOLIO_TAG);
+  revalidatePath("/", "layout");
   return result;
 }
 
@@ -136,7 +141,7 @@ export async function deleteWork(id) {
   await mutateStore((data) => {
     data.works = data.works.filter((w) => w.id !== id);
   });
-  updateTag(PORTFOLIO_TAG);
+  revalidatePath("/", "layout");
 }
 
 // direction: -1 moves earlier, 1 moves later (within its series for works).
@@ -153,7 +158,7 @@ export async function moveItem(kind, id, direction) {
     if (!list[to]) return;
     [list[from], list[to]] = [list[to], list[from]];
   });
-  updateTag(PORTFOLIO_TAG);
+  revalidatePath("/", "layout");
 }
 
 const lines = (value) =>
@@ -171,6 +176,23 @@ const dated = (value) =>
       : { year: "", text: year.trim() };
   });
 
+export async function saveExhibitions(_prev, formData) {
+  await requireAdmin();
+  if (!isSupabaseConfigured()) {
+    return {
+      error:
+        "Set SUPABASE_URL and SUPABASE_SECRET_KEY before saving exhibitions.",
+    };
+  }
+
+  const entries = dated(text(formData, "exhibitions", 6000)).filter(
+    (entry) => entry.text,
+  );
+  await replaceExhibitions(entries);
+  revalidatePath("/exhibitions");
+  return { ok: true, message: "Exhibitions saved to Supabase." };
+}
+
 export async function saveSite(_prev, formData) {
   await requireAdmin();
   const name = text(formData, "name", 80);
@@ -180,6 +202,14 @@ export async function saveSite(_prev, formData) {
     return { label: label.trim(), url: rest.join("|").trim() };
   });
   const portrait = text(formData, "portrait", 2000);
+  const making = lines(text(formData, "making", 4000)).map((line) => {
+    const [icon, title, ...description] = line.split("|");
+    return {
+      icon: icon?.trim(),
+      title: title?.trim(),
+      text: description.join("|").trim(),
+    };
+  });
   if (!name) return { error: "The artist name can’t be empty." };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return { error: "Enter a valid email address." };
@@ -191,6 +221,19 @@ export async function saveSite(_prev, formData) {
   }
   if (portrait && !isImageLink(portrait)) {
     return { error: "The portrait link must start with http://, https:// or /." };
+  }
+  if (
+    making.some(
+      (step) =>
+        !["wheel", "trim", "glaze", "kiln"].includes(step.icon) ||
+        !step.title ||
+        !step.text,
+    )
+  ) {
+    return {
+      error:
+        "Write each making step as: wheel | Form | Description. Icons: wheel, trim, glaze or kiln.",
+    };
   }
 
   const site = {
@@ -207,8 +250,8 @@ export async function saveSite(_prev, formData) {
       text(formData, "statement2", 300),
     ].filter(Boolean),
     about: lines(text(formData, "about", 6000)),
+    making,
     education: dated(text(formData, "education", 4000)),
-    exhibitions: dated(text(formData, "exhibitions", 6000)),
     press: dated(text(formData, "press", 4000)),
     collections: lines(text(formData, "collections", 3000)),
     memberships: lines(text(formData, "memberships", 3000)),
@@ -220,6 +263,27 @@ export async function saveSite(_prev, formData) {
   await mutateStore((data) => {
     data.site = site;
   });
-  updateTag(PORTFOLIO_TAG);
+  revalidatePath("/", "layout");
   return { ok: true, message: "Site details saved." };
+}
+
+export async function submitContact(_prev, formData) {
+  const name = text(formData, "name", 120);
+  const email = text(formData, "email", 254);
+  const topic = text(formData, "topic", 160);
+  const message = text(formData, "message", 5000);
+
+  if (!name || !email || !topic || !message) {
+    return { error: "Complete each field before sending your message." };
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return { error: "Enter a valid email address." };
+  }
+
+  await saveContactMessage({ name, email, topic, message });
+  revalidatePath("/admin");
+  return {
+    ok: true,
+    message: "Your message has been saved. The studio can follow up by email.",
+  };
 }

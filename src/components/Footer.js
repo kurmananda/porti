@@ -1,11 +1,8 @@
 import Link from "next/link";
-import { getSite } from "@/lib/data";
 import Icon from "./Icons";
 import Reveal from "./Reveal";
 
-export default async function Footer() {
-  const site = await getSite();
-
+export default function Footer({ site }) {
   return (
     <footer className="mt-24 bg-paper text-ink sm:mt-32">
       <div className="mx-auto max-w-[1500px] px-5 pb-10 pt-20 sm:px-10 sm:pt-28">
@@ -54,7 +51,7 @@ export default async function Footer() {
             ))}
             <li>
               <Link href="/works" className="link-draw hover:text-ink">
-                Works
+                Series
               </Link>
             </li>
             <li>

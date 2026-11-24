@@ -1,19 +1,23 @@
+import { Suspense } from "react";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import { getPortfolio, getSite, recentSeries } from "@/lib/data";
+import Loading from "@/components/Loading";
+import { getSite } from "@/lib/data";
 
-// How many series the Works menu lists before "More series".
-const MENU_LIMIT = 5;
+async function SiteFrame({ children }) {
+  const site = await getSite();
+  return (
+    <>
+      <Header name={site.name} />
+      <main id="content" className="page-enter flex-1">
+        {children}
+      </main>
+      <Footer site={site} />
+    </>
+  );
+}
 
-export default async function SiteLayout({ children }) {
-  const [portfolio, site] = await Promise.all([getPortfolio(), getSite()]);
-  const series = recentSeries(portfolio, MENU_LIMIT).map(({ id, slug, title, cover }) => ({
-    id,
-    slug,
-    title,
-    cover,
-  }));
-
+export default function SiteLayout({ children }) {
   return (
     <>
       <a
@@ -22,14 +26,9 @@ export default async function SiteLayout({ children }) {
       >
         Skip to content
       </a>
-      <Header
-        name={site.name}
-        series={series}
-      />
-      <main id="content" className="page-enter flex-1">
-        {children}
-      </main>
-      <Footer />
+      <Suspense fallback={<Loading label="Loading the studio…" />}>
+        <SiteFrame>{children}</SiteFrame>
+      </Suspense>
     </>
   );
 }

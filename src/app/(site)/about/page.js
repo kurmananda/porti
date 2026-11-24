@@ -3,11 +3,11 @@ import Icon from "@/components/Icons";
 import Portrait from "@/components/Portrait";
 import Reveal from "@/components/Reveal";
 import { getSite } from "@/lib/data";
-import { CV_PATH, making } from "@/lib/site";
+import { CV_PATH } from "@/lib/site";
 
 export const metadata = { title: "About" };
 
-// A titled list of entries (exhibitions, education, press).
+// A titled list of entries such as education or press.
 function Timeline({ title, entries }) {
   if (entries.length === 0) return null;
   return (
@@ -21,20 +21,7 @@ function Timeline({ title, entries }) {
             key={entry.text}
             className="flex gap-6 border-t-[1.5px] border-line py-4 text-base transition-[padding] duration-500 ease-kiln hover:pl-3 sm:gap-10"
           >
-            {title === "Selected exhibitions" ? (
-              <span>
-                {entry.text
-                  .replace(/\b\d+(?:st|nd|rd|th)?(?:\s+edition)?\b/g, "")
-                  .replace(/\(\s*also\s*\)/gi, "")
-                  .replace(/,\s*,+/g, ",")
-                  .replace(/,\s*$/g, "")
-                  .replace(/\s+([,.])/g, "$1")
-                  .replace(/\s{2,}/g, " ")
-                  .trim()}
-              </span>
-            ) : (
-              <span>{entry.text}</span>
-            )}
+            <span>{entry.text}</span>
           </li>
         ))}
       </ul>
@@ -96,7 +83,7 @@ export default async function AboutPage() {
                 className="btn label"
                 style={{ "--btn-fill": "var(--clay)" }}
               >
-                View the works <span className="arrow">→</span>
+                View the series <span className="arrow">→</span>
               </Link>
               <Link href="/contact" className="btn label">
                 Get in touch
@@ -109,7 +96,6 @@ export default async function AboutPage() {
         </div>
 
         <div className="mt-28 space-y-20 sm:mt-40 sm:space-y-28">
-          <Timeline title="Selected exhibitions" entries={site.exhibitions} />
           <Timeline title="Education & training" entries={site.education} />
           <Timeline title="Selected press" entries={site.press} />
         </div>
@@ -132,7 +118,7 @@ export default async function AboutPage() {
           </h2>
         </Reveal>
         <ol className="mt-10 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-          {making.map((step, index) => (
+          {site.making.map((step, index) => (
             <Reveal as="li" key={step.title} delay={index * 120}>
               <div className="rule mb-7" />
               <Icon name={step.icon} draw className="h-14 w-14 text-clay" />

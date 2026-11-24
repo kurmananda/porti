@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
-import WorkImage from "./WorkImage";
 
 const LINKS = [
-  { key: "works", label: "Works", href: "/works" },
+  { key: "works", label: "Series", href: "/works" },
+  { key: "exhibitions", label: "Exhibitions", href: "/exhibitions" },
   { key: "about", label: "About", href: "/about" },
   { key: "contact", label: "Contact", href: "/contact" },
 ];
@@ -19,21 +19,16 @@ function PathnameReporter({ onChange }) {
   return null;
 }
 
-export default function Header({ name, series }) {
+export default function Header({ name }) {
   const [pathname, setPathname] = useState(null);
-  const [panelOpen, setPanelOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [preview, setPreview] = useState(0);
 
   const navRef = useRef(null);
   const indicatorRef = useRef(null);
-  const closeTimer = useRef(null);
 
   const activeKey =
     LINKS.find((link) => pathname?.startsWith(link.href))?.key ?? null;
-  const overlayOpen = panelOpen || menuOpen;
-
   // Slide the nav indicator under a link, or back to the current page's link.
   const moveIndicator = useCallback((key) => {
     const indicator = indicatorRef.current;
@@ -64,16 +59,15 @@ export default function Header({ name, series }) {
   }, []);
 
   useEffect(() => {
-    if (!overlayOpen) return;
+    if (!menuOpen) return;
     const onKey = (event) => {
       if (event.key === "Escape") {
-        setPanelOpen(false);
         setMenuOpen(false);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [overlayOpen]);
+  }, [menuOpen]);
 
   useEffect(() => {
     document.documentElement.style.overflow = menuOpen ? "hidden" : "";
@@ -82,21 +76,11 @@ export default function Header({ name, series }) {
     };
   }, [menuOpen]);
 
-  const openPanel = () => {
-    clearTimeout(closeTimer.current);
-    setPanelOpen(true);
-  };
-  const closePanelSoon = () => {
-    clearTimeout(closeTimer.current);
-    closeTimer.current = setTimeout(() => setPanelOpen(false), 160);
-  };
   const closeAll = () => {
-    clearTimeout(closeTimer.current);
-    setPanelOpen(false);
     setMenuOpen(false);
   };
 
-  const solid = scrolled || panelOpen;
+  const solid = scrolled;
 
   return (
     <>
@@ -105,8 +89,6 @@ export default function Header({ name, series }) {
       </Suspense>
 
       <header
-        onMouseLeave={closePanelSoon}
-        onMouseEnter={() => clearTimeout(closeTimer.current)}
         className="fixed inset-x-0 top-0 z-50"
       >
         <div
@@ -130,44 +112,20 @@ export default function Header({ name, series }) {
               className="relative hidden items-center md:flex"
             >
               {LINKS.map((link) => {
-                const shared = {
-                  "data-nav": link.key,
-                  onMouseEnter: () => {
-                    moveIndicator(link.key);
-                    if (link.key === "works") openPanel();
-                    else setPanelOpen(false);
-                  },
-                  onFocus: () => moveIndicator(link.key),
-                  className: `label relative px-5 py-3 !text-[0.875rem] transition-colors duration-300 ${
-                    activeKey === link.key ? "text-clay" : "text-ink hover:text-clay"
-                  }`,
-                };
-                return link.key === "works" ? (
-                  <button
-                    key={link.key}
-                    type="button"
-                    aria-expanded={panelOpen}
-                    aria-controls="works-panel"
-                    onClick={openPanel}
-                    {...shared}
-                  >
-                    {link.label}
-                    <span
-                      aria-hidden="true"
-                      className={`ml-2 inline-block transition-transform duration-500 ease-kiln ${
-                        panelOpen ? "rotate-45" : ""
-                      }`}
-                    >
-                      +
-                    </span>
-                  </button>
-                ) : (
+                return (
                   <Link
                     key={link.key}
                     href={link.href}
                     aria-current={activeKey === link.key ? "page" : undefined}
+                    data-nav={link.key}
+                    onMouseEnter={() => moveIndicator(link.key)}
+                    onFocus={() => moveIndicator(link.key)}
                     onClick={closeAll}
-                    {...shared}
+                    className={`label relative px-5 py-3 !text-[0.875rem] transition-colors duration-300 ${
+                      activeKey === link.key
+                        ? "text-clay"
+                        : "text-ink hover:text-clay"
+                    }`}
                   >
                     {link.label}
                   </Link>
@@ -208,78 +166,6 @@ export default function Header({ name, series }) {
           />
         </div>
 
-        {/* Desktop: series panel with a live preview */}
-        <div
-          id="works-panel"
-          inert={!panelOpen}
-          className={`absolute inset-x-0 top-full hidden border-b border-line bg-paper transition-all duration-500 ease-kiln md:block ${
-            panelOpen
-              ? "translate-y-0 opacity-100"
-              : "pointer-events-none -translate-y-3 opacity-0"
-          }`}
-        >
-          <div className="mx-auto grid max-w-[1500px] grid-cols-12 gap-10 px-10 py-10">
-            <div className="col-span-7 lg:col-span-8">
-              <p className="label mb-5 text-stone">Recent series</p>
-              <ul className="gap-x-10 border-b border-line lg:columns-2">
-                {series.map((item, index) => (
-                  <li key={item.id} className="break-inside-avoid">
-                    <Link
-                      href={`/works/${item.slug}`}
-                      onClick={closeAll}
-                      onMouseEnter={() => setPreview(index)}
-                      onFocus={() => setPreview(index)}
-                      className={`group flex items-baseline gap-5 border-t border-line py-3 transition-all duration-500 ease-kiln hover:pl-3 ${
-                        preview === index ? "text-ink" : "text-stone"
-                      }`}
-                      style={{
-                        transitionDelay: panelOpen ? `${index * 40}ms` : "0ms",
-                        opacity: panelOpen ? 1 : 0,
-                      }}
-                    >
-                      <span className="font-display text-xl lg:text-2xl">
-                        {item.title}
-                      </span>
-                      <span
-                        aria-hidden="true"
-                        className="ml-auto -translate-x-2 text-clay opacity-0 transition-all duration-500 ease-kiln group-hover:translate-x-0 group-hover:opacity-100"
-                      >
-                        →
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-              <Link href="/works" onClick={closeAll} className="btn label mt-8">
-                All artwork{" "}
-                <span className="arrow">→</span>
-              </Link>
-            </div>
-
-            <div className="col-span-5 lg:col-span-4">
-              <div className="relative aspect-[4/5] max-h-[58vh] w-full overflow-hidden bg-paper-deep">
-                {series.map(
-                  (item, index) =>
-                    item.cover && (
-                      <WorkImage
-                        key={item.id}
-                        src={item.cover}
-                        alt=""
-                        className={`absolute inset-0 h-full w-full object-cover !transition-all !duration-700 ${
-                          preview === index
-                            ? "scale-100 !opacity-100"
-                            : "scale-105 !opacity-0"
-                        }`}
-                      />
-                    ),
-                )}
-              </div>
-              <p className="label mt-3 text-stone">
-                {series[preview]?.title}
-              </p>
-            </div>
-          </div>
-        </div>
       </header>
 
       {/* Mobile: full-screen menu */}
@@ -315,21 +201,6 @@ export default function Header({ name, series }) {
                     <span className="h-2.5 w-2.5 rounded-full bg-clay" />
                   )}
                 </Link>
-                {link.key === "works" && (
-                  <ul className="mb-5 mt-3 grid grid-cols-2 gap-x-4 border-l-2 border-clay pl-5">
-                    {series.map((item) => (
-                      <li key={item.id}>
-                        <Link
-                          href={`/works/${item.slug}`}
-                          onClick={closeAll}
-                          className="block py-2 text-base text-stone active:text-ink"
-                        >
-                          {item.title}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
               </li>
             ))}
           </ul>

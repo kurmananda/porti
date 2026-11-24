@@ -4,7 +4,7 @@ import WorkImage from "@/components/WorkImage";
 import WorksExplorer from "@/components/WorksExplorer";
 import { getPortfolio } from "@/lib/data";
 
-export const metadata = { title: "Works" };
+export const metadata = { title: "Series" };
 
 export default async function WorksPage() {
   const portfolio = await getPortfolio();
@@ -13,9 +13,9 @@ export default async function WorksPage() {
     <div className="mx-auto max-w-[1500px] px-5 pt-32 sm:px-10 sm:pt-44">
       <header className="mb-10 sm:mb-14">
         <div>
-          <p className="label text-stone">Artwork</p>
+          <p className="label text-stone">Series</p>
           <h1 className="mt-3 font-display text-3xl leading-tight sm:text-4xl">
-            Artwork
+            Series
           </h1>
         </div>
       </header>

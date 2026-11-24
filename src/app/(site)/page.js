@@ -1,12 +1,10 @@
 import Link from "next/link";
-import Icon from "@/components/Icons";
 import Reveal from "@/components/Reveal";
 import SeriesList from "@/components/SeriesList";
 import Tilt from "@/components/Tilt";
-import Portrait from "@/components/Portrait";
 import RecentWorks from "@/components/RecentWorks";
+import WorkImage from "@/components/WorkImage";
 import { getPortfolio, getSite, recentSeries, recentWorks } from "@/lib/data";
-import { making } from "@/lib/site";
 
 function Words({ text, from = 0 }) {
   return text.split(" ").map((word, index) => (
@@ -46,7 +44,7 @@ export default async function Home() {
               className="btn label"
               style={{ "--btn-fill": "var(--clay)" }}
             >
-              View the works <span className="arrow">→</span>
+              View the series <span className="arrow">→</span>
             </Link>
             <Link href="/about" className="btn label">
               About the studio
@@ -54,38 +52,34 @@ export default async function Home() {
           </div>
         </div>
 
-        <div className="relative col-span-12 mt-12 flex justify-center lg:col-span-5 lg:col-start-8 lg:mt-4 lg:justify-end">
-          <Tilt className="w-[min(100%,26rem,56svh)]">
-            <Link
-              href="/about"
-              className="group block w-[min(100%,26rem,56svh)]"
-              aria-label={`About ${site.name}`}
-            >
-              <Reveal
-                variant="clip"
-                delay={500}
-                className="relative aspect-[4/5] w-[min(100%,26rem,56svh)] overflow-hidden bg-paper-deep"
+        {latestWorks[0] && (
+          <div className="relative col-span-12 mt-12 flex justify-center lg:col-span-5 lg:col-start-8 lg:mt-4 lg:justify-end">
+            <Tilt className="w-[min(100%,26rem,56svh)]">
+              <Link
+                href={`/works/${latestWorks[0].seriesSlug}`}
+                className="group block w-[min(100%,26rem,56svh)]"
+                aria-label={`View ${latestWorks[0].title}`}
               >
-                <div className="relative h-full w-full">
-                  <Portrait
-                    src={site.portrait}
-                    name={site.name}
+                <Reveal
+                  variant="clip"
+                  delay={500}
+                  className="relative aspect-[4/5] w-[min(100%,26rem,56svh)] overflow-hidden bg-paper-deep"
+                >
+                  <WorkImage
+                    src={latestWorks[0].image}
+                    alt={latestWorks[0].title}
                     eager
-                    className="group-hover:scale-105"
+                    className="h-full w-full object-cover group-hover:scale-105"
                   />
-                  <span className="absolute inset-y-0 right-0 flex w-12 items-center justify-center border-l border-ink/15 bg-paper/65 text-ink backdrop-blur-sm transition-colors duration-500 group-hover:bg-paper/80">
-                    <span className="label rotate-180 [writing-mode:vertical-rl]">
-                      About {site.name.split(" ")[0]}
-                    </span>
-                  </span>
+                </Reveal>
+                <div className="label mt-3 flex justify-between gap-4 text-stone">
+                  <span>{latestWorks[0].title}</span>
+                  <span>{latestWorks[0].seriesTitle}</span>
                 </div>
-              </Reveal>
-              <div className="label mt-3 text-right text-stone">
-                {site.location}
-              </div>
-            </Link>
-          </Tilt>
-        </div>
+              </Link>
+            </Tilt>
+          </div>
+        )}
       </section>
 
       <section
@@ -93,7 +87,7 @@ export default async function Home() {
         className="mx-auto max-w-[1500px] scroll-mt-24 px-5 pt-24 sm:px-10 sm:pt-36"
       >
         <Reveal className="mb-8">
-          <h2 className="label text-stone">Artwork</h2>
+          <h2 className="label text-stone">Series</h2>
         </Reveal>
         {portfolio.length > 0 ? (
           <>
@@ -105,7 +99,7 @@ export default async function Home() {
                   className="btn label"
                   style={{ "--btn-fill": "var(--clay)" }}
                 >
-                  More artwork{" "}
+                  More series{" "}
                   <span className="arrow">→</span>
                 </Link>
               </Reveal>
@@ -132,7 +126,7 @@ export default async function Home() {
                   className="btn label"
                   style={{ "--btn-fill": "var(--clay)" }}
                 >
-                  More artwork{" "}
+                  More series{" "}
                   <span className="arrow">→</span>
                 </Link>
               </Reveal>
@@ -148,22 +142,25 @@ export default async function Home() {
               How a piece is made
             </p>
             <h2 className="col-span-12 mt-4 font-display text-3xl leading-[1.12] sm:text-4xl lg:col-span-9 lg:mt-0">
-              Made by hand, with{" "}
-              <em className="text-stone">meticulous attention</em> to detail.
+              A closer look at the{" "}
+              <em className="text-stone">making of each piece.</em>
             </h2>
           </Reveal>
-          <ol className="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4">
-            {making.map((step, index) => (
-              <Reveal as="li" key={step.title} delay={index * 140}>
-                <div className="rule mb-8" />
-                <Icon name={step.icon} draw className="h-12 w-12 text-glaze-light" />
-                <h3 className="mt-6 flex items-baseline gap-3 font-display text-3xl">
-                  {step.title}
-                </h3>
-                <p className="mt-3 text-base text-stone">{step.text}</p>
-              </Reveal>
-            ))}
-          </ol>
+          <Reveal variant="clip" className="mt-12 overflow-hidden bg-ink sm:mt-16">
+            <video
+              controls
+              playsInline
+              preload="none"
+              poster={latestWorks[0]?.image}
+              className="aspect-video w-full object-cover"
+            >
+              <source
+                src="/videos/how-a-piece-is-made.mp4"
+                type="video/mp4"
+              />
+              Your browser does not support embedded videos.
+            </video>
+          </Reveal>
         </div>
       </section>
 

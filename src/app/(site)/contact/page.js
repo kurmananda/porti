@@ -20,7 +20,6 @@ export default async function ContactPage() {
       <div className="mt-16 grid grid-cols-12 gap-x-6 gap-y-16 sm:mt-24">
         <Reveal className="col-span-12 lg:col-span-7">
           <ContactForm
-            email={site.email}
             seriesTitles={portfolio.map((series) => series.title)}
           />
         </Reveal>

@@ -3,14 +3,23 @@ import { Suspense } from "react";
 import AdminDashboard from "@/components/AdminDashboard";
 import { isAdmin } from "@/lib/auth";
 import { groupPortfolio, mergeSite } from "@/lib/data";
-import { readStore } from "@/lib/store";
+import { getExhibitions } from "@/lib/exhibitions";
+import { getContactMessages, readStore } from "@/lib/store";
 
 async function Dashboard() {
   if (!(await isAdmin())) redirect("/admin/login");
-  // Read the file directly so the admin never sees a cached copy.
-  const store = await readStore();
+  const [store, exhibitions, messages] = await Promise.all([
+    readStore(),
+    getExhibitions(),
+    getContactMessages(),
+  ]);
   return (
-    <AdminDashboard portfolio={groupPortfolio(store)} site={mergeSite(store.site)} />
+    <AdminDashboard
+      portfolio={groupPortfolio(store)}
+      site={mergeSite(store.site)}
+      exhibitions={exhibitions}
+      messages={messages}
+    />
   );
 }
 

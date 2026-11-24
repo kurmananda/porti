@@ -1,5 +1,4 @@
 import { Fraunces, Geist } from "next/font/google";
-import { getSite } from "@/lib/data";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,16 +13,13 @@ const fraunces = Fraunces({
   axes: ["SOFT", "WONK", "opsz"],
 });
 
-export async function generateMetadata() {
-  const site = await getSite();
-  return {
-    title: {
-      default: site.name,
-      template: `%s — ${site.name}`,
-    },
-    description: site.statements[0],
-  };
-}
+export const metadata = {
+  title: {
+    default: "Megha Goenka",
+    template: "%s — Megha Goenka",
+  },
+  description: "Ceramic artist — installation, sculpture, drawing.",
+};
 
 export default function RootLayout({ children }) {
   return (

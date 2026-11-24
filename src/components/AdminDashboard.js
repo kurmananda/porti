@@ -7,6 +7,7 @@ import {
   deleteWork,
   logout,
   moveItem,
+  saveExhibitions,
   saveSeries,
   saveSite,
   saveWork,
@@ -157,7 +158,8 @@ function SiteForm({ site }) {
     </div>
   );
 
-  const dated = (entries) => entries.map((e) => `${e.year} | ${e.text}`).join("\n");
+  const dated = (entries) =>
+    entries.map((entry) => `${entry.year} | ${entry.text}`).join("\n");
   const datedHint = "One entry per line, written as: year | details.";
 
   return (
@@ -209,11 +211,16 @@ function SiteForm({ site }) {
         rows: 10,
         hint: "Leave a blank line between paragraphs. The first paragraph is the large opening text.",
       })}
-      {text("exhibitions", "Selected exhibitions", dated(site.exhibitions), {
-        wide: true,
-        rows: 8,
-        hint: datedHint,
-      })}
+      {text(
+        "making",
+        "How a piece is made",
+        site.making.map((step) => `${step.icon} | ${step.title} | ${step.text}`).join("\n"),
+        {
+          wide: true,
+          rows: 5,
+          hint: "One per line: icon | title | description. Icons: wheel, trim, glaze or kiln.",
+        },
+      )}
       {text("education", "Education & training", dated(site.education), {
         wide: true,
         rows: 5,
@@ -237,6 +244,48 @@ function SiteForm({ site }) {
       <div className="flex flex-wrap items-center gap-4 sm:col-span-2">
         <button type="submit" disabled={pending} className={primary}>
           {pending ? "Saving…" : "Save site details"}
+        </button>
+        <Notice state={state} />
+      </div>
+    </form>
+  );
+}
+
+function ExhibitionsForm({ exhibitions }) {
+  const [state, action, pending] = useActionState(saveExhibitions, {});
+  const value = exhibitions.entries
+    .map((entry) => `${entry.year} | ${entry.text}`)
+    .join("\n");
+
+  return (
+    <form action={action} className="grid gap-5">
+      {!exhibitions.configured && (
+        <p role="status" className="text-base text-clay">
+          Configure SUPABASE_URL and SUPABASE_SECRET_KEY to load and save
+          exhibitions. The SQL setup is in supabase/schema.sql.
+        </p>
+      )}
+      <div>
+        <label htmlFor="site-exhibitions" className="label text-stone">
+          Exhibitions
+        </label>
+        <textarea
+          id="site-exhibitions"
+          name="exhibitions"
+          rows={12}
+          maxLength={6000}
+          defaultValue={value}
+          placeholder={"2025 | Exhibition name, venue, location"}
+          className={field}
+        />
+        <p className="mt-2 text-base text-stone">
+          One per line, written as: year | exhibition, venue and location. The
+          public page sorts entries by year, newest first.
+        </p>
+      </div>
+      <div className="flex flex-wrap items-center gap-4">
+        <button type="submit" disabled={pending || !exhibitions.configured} className={primary}>
+          {pending ? "Saving…" : "Save exhibitions"}
         </button>
         <Notice state={state} />
       </div>
@@ -341,11 +390,12 @@ function WorkForm({ work, seriesId, allSeries, onDone }) {
   );
 }
 
-export default function AdminDashboard({ portfolio, site }) {
+export default function AdminDashboard({ portfolio, site, exhibitions, messages }) {
   const [selectedId, setSelectedId] = useState(portfolio[0]?.id ?? null);
   const [creating, setCreating] = useState(portfolio.length === 0);
   const [editingWork, setEditingWork] = useState(null);
   const [editingSite, setEditingSite] = useState(false);
+  const [editingExhibitions, setEditingExhibitions] = useState(false);
   const [busy, startTransition] = useTransition();
 
   const selected = portfolio.find((series) => series.id === selectedId) ?? portfolio[0];
@@ -386,12 +436,50 @@ export default function AdminDashboard({ portfolio, site }) {
         </div>
       </header>
 
+      <section className="mt-10">
+        <h2 className="font-display text-3xl">Contact messages</h2>
+        {messages.length > 0 ? (
+          <ul className="mt-5 divide-y-[1.5px] divide-line border-y-[1.5px] border-line">
+            {messages.map((message) => (
+              <li key={message.id} className="grid gap-3 py-5 sm:grid-cols-[1fr_auto]">
+                <div>
+                  <p className="font-display text-xl">{message.name}</p>
+                  <a
+                    href={`mailto:${message.email}`}
+                    className="link-draw mt-1 inline-block text-base text-stone"
+                  >
+                    {message.email}
+                  </a>
+                  <p className="label mt-3 text-stone">{message.topic}</p>
+                  <p className="mt-3 whitespace-pre-wrap text-base">{message.message}</p>
+                </div>
+                <time
+                  dateTime={message.created_at}
+                  className="label text-stone sm:text-right"
+                >
+                  {new Intl.DateTimeFormat("en", {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  }).format(new Date(message.created_at))}
+                </time>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-3 text-base text-stone">No messages yet.</p>
+        )}
+      </section>
+
       <div className="mt-10 grid gap-12 lg:grid-cols-[19rem_1fr]">
         <aside>
           <h2 className="label text-stone">Series</h2>
           <ul className="mt-4">
             {portfolio.map((series, index) => {
-              const current = !showCreate && !editingSite && series.id === selected.id;
+              const current =
+                !showCreate &&
+                !editingSite &&
+                !editingExhibitions &&
+                series.id === selected.id;
               return (
                 <li key={series.id} className="flex items-stretch border-t-[1.5px] border-line">
                   <button
@@ -401,6 +489,7 @@ export default function AdminDashboard({ portfolio, site }) {
                       setCreating(false);
                       setEditingWork(null);
                       setEditingSite(false);
+                      setEditingExhibitions(false);
                     }}
                     aria-current={current ? "true" : undefined}
                     className={`flex min-w-0 flex-1 items-baseline justify-between gap-3 py-3 text-left transition-[padding,color] duration-300 ${
@@ -441,6 +530,7 @@ export default function AdminDashboard({ portfolio, site }) {
             onClick={() => {
               setCreating(true);
               setEditingSite(false);
+              setEditingExhibitions(false);
             }}
             className={`${quiet} mt-5 w-full`}
           >
@@ -453,18 +543,47 @@ export default function AdminDashboard({ portfolio, site }) {
             onClick={() => setEditingSite(true)}
             aria-current={editingSite ? "true" : undefined}
             className={`mt-4 block w-full border-y-[1.5px] border-line py-3 text-left font-display text-2xl transition-[padding,color] duration-300 ${
-              editingSite ? "border-l-4 border-l-clay pl-3 text-clay" : "hover:text-clay"
+              editingSite
+                ? "border-l-4 border-l-clay pl-3 text-clay"
+                : "hover:text-clay"
             }`}
           >
             Site details
           </button>
+          <button
+            type="button"
+            onClick={() => {
+              setEditingExhibitions(true);
+              setEditingSite(false);
+              setCreating(false);
+            }}
+            aria-current={editingExhibitions ? "true" : undefined}
+            className={`mt-3 block w-full border-b-[1.5px] border-line py-3 text-left font-display text-2xl transition-[padding,color] duration-300 ${
+              editingExhibitions
+                ? "border-l-4 border-l-clay pl-3 text-clay"
+                : "hover:text-clay"
+            }`}
+          >
+            Exhibitions
+          </button>
         </aside>
 
-        {editingSite ? (
+        {editingExhibitions ? (
+          <section>
+            <h2 className="font-display text-4xl">Exhibitions</h2>
+            <p className="mt-2 text-stone">
+              Exhibition entries are stored in Supabase, separately from the
+              portfolio file.
+            </p>
+            <div className="mt-8">
+              <ExhibitionsForm exhibitions={exhibitions} />
+            </div>
+          </section>
+        ) : editingSite ? (
           <section>
             <h2 className="font-display text-4xl">Site details</h2>
             <p className="mt-2 text-stone">
-              The artist’s name, portrait, profile, exhibitions and contact links.
+              The artist’s name, portrait, profile and contact links.
             </p>
             <div className="mt-8">
               <SiteForm site={site} />

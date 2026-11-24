@@ -1,93 +1,38 @@
-"use client";
-
 import Link from "next/link";
-import { useRef, useState } from "react";
+import Reveal from "./Reveal";
 import WorkImage from "./WorkImage";
 
-// Rows of series. On a mouse, the hovered row's cover floats beside the cursor.
+// Series covers and titles remain visible without relying on hover.
 export default function SeriesList({ series }) {
-  const [active, setActive] = useState(null);
-  const floatRef = useRef(null);
-
-  const onMove = (event) => {
-    if (event.pointerType !== "mouse" || !floatRef.current) return;
-    const rect = event.currentTarget.getBoundingClientRect();
-    floatRef.current.style.transform = `translate3d(${event.clientX - rect.left}px, ${event.clientY - rect.top}px, 0)`;
-  };
-
   return (
-    <div
-      className="relative overflow-x-clip"
-      onPointerMove={onMove}
-      onPointerLeave={() => setActive(null)}
-    >
-      <ul className="border-b-[1.5px] border-line">
-        {series.map((item, index) => (
-          <li key={item.id}>
-            <Link
-              href={`/works/${item.slug}`}
-              onPointerEnter={(event) => {
-                if (event.pointerType === "mouse") setActive(index);
-              }}
-              onFocus={() => setActive(index)}
-              onBlur={() => setActive(null)}
-              className={`group grid grid-cols-12 items-center gap-x-4 border-t-[1.5px] border-line py-6 transition-[opacity,padding,color] duration-500 ease-kiln sm:py-8 ${
-                active !== null && active !== index ? "opacity-35" : "opacity-100"
-              } ${active === index ? "text-clay md:pl-6" : ""}`}
-            >
-              <span className="col-span-12 font-display text-2xl leading-tight sm:col-span-7 sm:text-3xl lg:text-4xl">
-                {item.title}
-              </span>
-              <span className="col-span-12 mt-2 flex items-center justify-end gap-3 text-stone sm:col-span-5 sm:mt-0">
-                <span
-                  aria-hidden="true"
-                  className="inline-block text-base text-ink transition-transform duration-500 ease-kiln group-hover:translate-x-2"
-                >
-                  →
-                </span>
-              </span>
-
-              {/* Touch screens have no cursor to follow, so show the cover inline. */}
-              {item.cover && (
-                <span className="col-span-10 col-start-3 mt-5 block aspect-[16/10] overflow-hidden bg-paper-deep md:hidden">
-                  <WorkImage
-                    src={item.cover}
-                    alt=""
-                    className="h-full w-full object-cover"
-                  />
-                </span>
-              )}
-            </Link>
-          </li>
-        ))}
-      </ul>
-
-      <div
-        ref={floatRef}
-        aria-hidden="true"
-        className="pointer-events-none absolute left-0 top-0 z-10 hidden transition-transform duration-500 ease-kiln will-change-transform md:block"
-      >
-        <div
-          className={`relative ml-10 aspect-[4/5] w-64 -translate-y-1/2 overflow-hidden bg-paper-deep shadow-2xl shadow-ink/20 transition-all duration-500 ease-kiln lg:w-80 ${
-            active === null ? "rotate-6 scale-75 opacity-0" : "rotate-0 scale-100 opacity-100"
-          }`}
+    <ul className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-14">
+      {series.map((item, index) => (
+        <Reveal
+          as="li"
+          key={item.id}
+          delay={(index % 3) * 100}
         >
-          {series.map(
-            (item, index) =>
-              item.cover && (
+          <Link href={`/works/${item.slug}`} className="group block">
+            <div className="aspect-[4/5] overflow-hidden bg-paper-deep">
+              {item.cover && (
                 <WorkImage
-                  key={item.id}
                   src={item.cover}
                   alt=""
-                  eager
-                  className={`absolute inset-0 h-full w-full object-cover !transition-opacity !duration-500 ${
-                    active === index ? "!opacity-100" : "!opacity-0"
-                  }`}
+                  className="h-full w-full object-cover group-hover:scale-105"
                 />
-              ),
-          )}
-        </div>
-      </div>
-    </div>
+              )}
+            </div>
+            <div className="mt-4 flex items-baseline justify-between gap-4">
+              <h3 className="font-display text-xl transition-colors duration-300 group-hover:text-clay sm:text-2xl">
+                {item.title}
+              </h3>
+              <span aria-hidden="true" className="text-stone transition-transform duration-300 group-hover:translate-x-1">
+                →
+              </span>
+            </div>
+          </Link>
+        </Reveal>
+      ))}
+    </ul>
   );
 }

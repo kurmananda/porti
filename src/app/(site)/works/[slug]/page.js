@@ -6,19 +6,15 @@ import Reveal from "@/components/Reveal";
 import WorkImage from "@/components/WorkImage";
 import { getPortfolio, getSeriesBySlug } from "@/lib/data";
 
-// Cache Components needs at least one param to validate the route, so an empty
-// portfolio prerenders a placeholder slug that resolves to notFound().
-export async function generateStaticParams() {
-  const portfolio = await getPortfolio();
-  return portfolio.length > 0
-    ? portfolio.map((series) => ({ slug: series.slug }))
-    : [{ slug: "untitled" }];
+// Cache Components needs a sample param; real series are fetched from Supabase at request time.
+export function generateStaticParams() {
+  return [{ slug: "untitled" }];
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const found = await getSeriesBySlug(slug);
-  if (!found) return { title: "Works" };
+  if (!found) return { title: "Series" };
   return {
     title: found.series.title,
     description: found.series.description || undefined,
@@ -36,7 +32,7 @@ async function Series({ params }) {
       <header className="grid grid-cols-12 gap-x-6">
         <div className="col-span-12 lg:col-span-8">
           <Link href="/works" className="label link-draw text-clay">
-            ← All works
+            ← All series
           </Link>
           <h1 className="mt-6 font-display text-3xl leading-tight sm:text-4xl">
             {series.title}
